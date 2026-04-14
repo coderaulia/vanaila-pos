@@ -1,4 +1,23 @@
 export type BadgeTone = 'neutral' | 'accent' | 'sun' | 'success' | 'danger';
+export type AppNavIcon =
+	| 'home'
+	| 'login'
+	| 'table'
+	| 'cart'
+	| 'checkout'
+	| 'help'
+	| 'cashier'
+	| 'held'
+	| 'transactions'
+	| 'shift'
+	| 'admin'
+	| 'catalog'
+	| 'orders'
+	| 'reports'
+	| 'superadmin'
+	| 'stores'
+	| 'admins'
+	| 'settings';
 
 export type AppHref =
 	| '/'
@@ -25,6 +44,7 @@ export interface AppNavItem {
 	label: string;
 	href: AppHref;
 	description: string;
+	icon: AppNavIcon;
 }
 
 export interface ShellBadge {
