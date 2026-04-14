@@ -1,5 +1,6 @@
 import type {
 	AlertItem,
+	CartItem,
 	DemoUser,
 	MetricCardItem,
 	ProductCardItem,
@@ -88,24 +89,75 @@ export const cashierProducts: ProductCardItem[] = [
 	}
 ];
 
-export const cashierCart = [
+export const cashierCart: CartItem[] = [
 	{
+		id: 'cart-1',
 		name: 'Vanilla Cloud Latte',
 		quantity: 2,
 		unitPrice: 5.5,
 		notes: 'Less sugar'
 	},
 	{
+		id: 'cart-2',
 		name: 'Cocoa Butter Croffle',
 		quantity: 1,
 		unitPrice: 4.1,
 		notes: 'Warm before serve'
 	},
 	{
+		id: 'cart-3',
 		name: 'Sparkling Citrus Tea',
 		quantity: 1,
 		unitPrice: 4.75,
 		notes: 'No ice'
+	}
+];
+
+export const cashierHeldOrders = [
+	{
+		id: 'hold-18',
+		title: 'Table 18',
+		detail: '3 drinks, 2 bakery items',
+		total: '$22.40',
+		updatedAt: 'Updated 4 min ago'
+	},
+	{
+		id: 'hold-counter-2',
+		title: 'Counter pickup',
+		detail: '1 frappe, 1 matcha oat shake',
+		total: '$12.20',
+		updatedAt: 'Updated 9 min ago'
+	},
+	{
+		id: 'hold-office',
+		title: 'Office runner',
+		detail: '6 drink preorder for 15:30',
+		total: '$34.80',
+		updatedAt: 'Updated 14 min ago'
+	}
+];
+
+export const cashierTransactions = [
+	{
+		id: 'txn-1024',
+		title: 'Order ORD-1024',
+		detail: 'QRIS · completed 2 min ago',
+		total: '$11.75',
+		status: 'Paid'
+	},
+	{
+		id: 'txn-1023',
+		title: 'Order ORD-1023',
+		detail: 'Cash · completed 6 min ago',
+		total: '$8.20',
+		status: 'Paid'
+	},
+	{
+		id: 'txn-1022',
+		title: 'Order ORD-1022',
+		detail: 'Card · voided by manager',
+		total: '$16.30',
+		status: 'Voided'
 	}
 ];
 
@@ -128,6 +180,30 @@ export const adminMetrics: MetricCardItem[] = [
 ];
 
 export const adminProducts = cashierProducts.slice(0, 4);
+
+export const adminOrders = [
+	{
+		id: 'ORD-1048',
+		guest: 'Table 08',
+		detail: '2 items · card',
+		total: '$13.25',
+		status: 'Ready to serve'
+	},
+	{
+		id: 'ORD-1047',
+		guest: 'Walk-in',
+		detail: '4 items · cash',
+		total: '$24.10',
+		status: 'Completed'
+	},
+	{
+		id: 'ORD-1046',
+		guest: 'Table 12',
+		detail: 'Self-checkout · QRIS',
+		total: '$18.60',
+		status: 'Kitchen in progress'
+	}
+];
 
 export const adminAlerts: AlertItem[] = [
 	{
@@ -183,5 +259,78 @@ export const superadminStores: StoreHealthCard[] = [
 		staff: 9,
 		orders: 214,
 		health: 'Watch inventory sync'
+	}
+];
+
+export const superadminAdminRoster = [
+	{
+		id: 'admin-raka',
+		name: 'Raka Admin',
+		email: 'admin@vanaila.test',
+		role: 'Store admin',
+		stores: 'Vanaila Tebet',
+		status: 'Active'
+	},
+	{
+		id: 'admin-lina',
+		name: 'Lina Ops',
+		email: 'lina.ops@vanaila.test',
+		role: 'Store admin',
+		stores: 'Vanaila BSD',
+		status: 'Active'
+	},
+	{
+		id: 'admin-fadil',
+		name: 'Fadil Finance',
+		email: 'fadil.finance@vanaila.test',
+		role: 'Finance admin',
+		stores: 'All stores',
+		status: 'Pending 2FA setup'
+	}
+];
+
+export const superadminSettings = [
+	{
+		id: 'setting-tax',
+		title: 'Tax presets',
+		detail: 'Versioned tax defaults are staged per city and can be propagated to stores.',
+		state: 'Ready for rollout'
+	},
+	{
+		id: 'setting-brand',
+		title: 'Customer branding',
+		detail: 'Receipt footer, guest-facing copy, and tone tokens stay consistent across channels.',
+		state: 'Shared system'
+	},
+	{
+		id: 'setting-policy',
+		title: 'Access policy',
+		detail:
+			'Admin invitations, privilege escalation, and password resets remain superadmin-controlled.',
+		state: 'Restricted'
+	}
+];
+
+export const tableDemoProfile = {
+	code: 'T12',
+	store: 'Vanaila Tebet',
+	zone: 'Window booth',
+	hostNote: 'Scan, order, and pay without waiting for the cashier terminal.'
+};
+
+export const tableCart: CartItem[] = [
+	{
+		id: 'table-cart-1',
+		name: 'Matcha Oat Shake',
+		quantity: 1,
+		unitPrice: 5.95,
+		notes: 'Less ice'
+	},
+	{
+		id: 'table-cart-2',
+		name: 'Burnt Sugar Kouign',
+		quantity: 2,
+		unitPrice: 4.85,
+		notes: 'Share plates'
 	}
 ];

@@ -1,12 +1,18 @@
 <script lang="ts">
-	import { CreditCard, Search, ShoppingCart, Sparkles } from 'lucide-svelte';
-	import Badge from '$components/ui/Badge.svelte';
+	import { CreditCard, Sparkles } from 'lucide-svelte';
+	import { resolve } from '$app/paths';
+	import PageIntro from '$components/layout/PageIntro.svelte';
+	import CartSummaryCard from '$components/commerce/CartSummaryCard.svelte';
+	import CatalogToolbar from '$components/commerce/CatalogToolbar.svelte';
+	import ProductGrid from '$components/commerce/ProductGrid.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import MetricCard from '$components/ui/MetricCard.svelte';
 	import { cashierCart, cashierProducts, cashierSummary } from '$mocks/pos';
+	import type { CartItem, ProductCardItem } from '$types/pos';
 
 	let search = $state('');
 	let activeCategory = $state('All');
+	let cart = $state<CartItem[]>([...cashierCart]);
 
 	const categories = ['All', ...new Set(cashierProducts.map((product) => product.category))];
 
@@ -22,9 +28,26 @@
 		})
 	);
 
-	const cartTotal = $derived(
-		cashierCart.reduce((total, item) => total + item.unitPrice * item.quantity, 0)
-	);
+	function addToCart(product: ProductCardItem) {
+		const existing = cart.find((item) => item.name === product.name);
+
+		if (existing) {
+			existing.quantity += 1;
+			cart = [...cart];
+			return;
+		}
+
+		cart = [
+			...cart,
+			{
+				id: `cashier-${product.id}`,
+				name: product.name,
+				quantity: 1,
+				unitPrice: product.price,
+				notes: 'Added from menu'
+			}
+		];
+	}
 </script>
 
 <svelte:head>
@@ -32,143 +55,63 @@
 </svelte:head>
 
 <div class="page">
-	<section class="hero-card">
-		<div class="cluster">
-			<Badge tone="accent">Mobile-first POS</Badge>
-			<Badge tone="success">Shift ready</Badge>
-		</div>
+	<PageIntro
+		compact={true}
+		kicker="New order"
+		title="Fast tap targets, quick cart review, and clear next actions for a busy cashier."
+		description="This page now focuses on the active sale only. Held orders, transactions, and shift tools moved into their own routes so the main cashier screen stays lighter."
+		badges={[
+			{ label: 'Mobile-first', tone: 'accent' },
+			{ label: 'Live cart', tone: 'success' }
+		]}
+	/>
 
-		<div class="spotlight">
-			<p class="eyebrow">Cashier terminal</p>
-			<h1 class="display-title">
-				Fast tap targets, quick cart review, and payment clarity on smaller screens.
-			</h1>
-			<p class="lead">
-				The cashier route prioritizes one-thumb navigation, sticky cart awareness, and minimal
-				cognitive load during busy service windows.
-			</p>
-		</div>
-
-		<div class="metric-grid">
-			<MetricCard
-				label="Current store"
-				value={cashierSummary.store}
-				detail="Primary register online"
-			/>
-			<MetricCard
-				label="Open tickets"
-				value={cashierSummary.openTickets}
-				detail="Kitchen still processing"
-			/>
-			<MetricCard
-				label="Today’s sales"
-				value={cashierSummary.sales}
-				detail="+14% against yesterday"
-			/>
-		</div>
-	</section>
+	<div class="metric-grid">
+		<MetricCard
+			label="Current store"
+			value={cashierSummary.store}
+			detail="Primary register online"
+		/>
+		<MetricCard
+			label="Open tickets"
+			value={cashierSummary.openTickets}
+			detail="Kitchen still processing"
+		/>
+		<MetricCard
+			label="Today’s sales"
+			value={cashierSummary.sales}
+			detail="+14% against yesterday"
+		/>
+	</div>
 
 	<section class="split-grid">
 		<div class="page">
-			<Card>
-				<div class="section-header">
-					<p class="kicker">Find products</p>
-					<h2 class="section-title">Catalog search</h2>
-				</div>
+			<CatalogToolbar
+				bind:search
+				bind:activeCategory
+				{categories}
+				title="Catalog search"
+				description="Search by product or SKU, then add directly into the active cart."
+				searchLabel="Search by product or SKU"
+				placeholder="Try Vanilla Cloud or LATTE-12"
+			/>
 
-				<label class="field">
-					<span class="muted">Search by product or SKU</span>
-					<div class="cluster">
-						<Search size={18} />
-						<input bind:value={search} type="search" placeholder="Try Vanilla Cloud or LATTE-12" />
-					</div>
-				</label>
-
-				<div class="chip-row">
-					{#each categories as category (category)}
-						<button
-							class={`chip ${category === activeCategory ? 'active' : ''}`}
-							onclick={() => (activeCategory = category)}
-						>
-							{category}
-						</button>
-					{/each}
-				</div>
-			</Card>
-
-			<div class="product-grid">
-				{#each filteredProducts as product (product.id)}
-					<article class="product-card">
-						<div class="list-row">
-							<div>
-								<strong>{product.name}</strong>
-								<div class="meta">{product.sku}</div>
-							</div>
-							<Badge tone={product.stock < 12 ? 'sun' : 'accent'}>
-								{product.stock < 12 ? 'Low stock' : 'Ready'}
-							</Badge>
-						</div>
-
-						<p class="muted">{product.description}</p>
-
-						<div class="cluster">
-							<span class="price">${product.price.toFixed(2)}</span>
-							<span class="meta">{product.category}</span>
-						</div>
-
-						<div class="progress-bar">
-							<div class="progress-fill" style={`--fill:${Math.max(12, product.stock)}%`}></div>
-						</div>
-
-						<button class="button">
-							<ShoppingCart size={18} />
-							Add to cart
-						</button>
-					</article>
-				{/each}
-			</div>
+			<ProductGrid products={filteredProducts} onSelect={addToCart} />
 		</div>
 
-		<Card>
-			<div class="section-header">
-				<p class="kicker">Current order</p>
-				<h2 class="section-title">Cart review</h2>
-			</div>
+		<div class="page">
+			<CartSummaryCard items={cart} taxAmount={1.72} />
 
-			<div class="cart-list">
-				{#each cashierCart as item (item.name)}
-					<div class="product-card">
-						<div class="list-row">
-							<div>
-								<strong>{item.name}</strong>
-								<div class="meta">{item.quantity} x ${item.unitPrice.toFixed(2)}</div>
-							</div>
-							<Badge>{item.notes}</Badge>
-						</div>
-						<div class="list-row">
-							<span class="muted">Line total</span>
-							<strong>${(item.unitPrice * item.quantity).toFixed(2)}</strong>
-						</div>
-					</div>
-				{/each}
-			</div>
-
-			<div class="divider"></div>
-
-			<div class="list">
-				<div class="list-row">
-					<span class="muted">Subtotal</span>
-					<strong>${cartTotal.toFixed(2)}</strong>
+			<Card>
+				<div class="section-header">
+					<p class="kicker">Quick jump</p>
+					<h2 class="section-title">Shift shortcuts</h2>
 				</div>
-				<div class="list-row">
-					<span class="muted">Tax</span>
-					<strong>$1.72</strong>
+				<div class="button-row">
+					<a class="button ghost" href={resolve('/cashier/held')}>Open held orders</a>
+					<a class="button ghost" href={resolve('/cashier/transactions')}>See transactions</a>
 				</div>
-				<div class="list-row">
-					<span class="muted">Total due</span>
-					<span class="price">${(cartTotal + 1.72).toFixed(2)}</span>
-				</div>
-			</div>
+			</Card>
 
 			<div class="button-row">
 				<button class="button">
@@ -180,6 +123,6 @@
 					Save draft
 				</button>
 			</div>
-		</Card>
+		</div>
 	</section>
 </div>

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
-	import AppHeader from '$components/layout/AppHeader.svelte';
 
 	let { children } = $props();
 </script>
@@ -20,7 +19,6 @@
 	<div class="ambient-orb b"></div>
 
 	<div class="page-shell">
-		<AppHeader />
 		{@render children()}
 	</div>
 </div>

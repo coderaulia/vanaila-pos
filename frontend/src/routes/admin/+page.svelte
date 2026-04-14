@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { Tabs } from 'bits-ui';
-	import { Boxes, ChartColumn, ClipboardList } from 'lucide-svelte';
-	import Badge from '$components/ui/Badge.svelte';
+	import { resolve } from '$app/paths';
+	import { ArrowRight } from 'lucide-svelte';
+	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import MetricCard from '$components/ui/MetricCard.svelte';
-	import { adminAlerts, adminMetrics, adminProducts } from '$mocks/pos';
-
-	let activeTab = $state('catalog');
+	import { adminAlerts, adminMetrics } from '$mocks/pos';
 </script>
 
 <svelte:head>
@@ -14,111 +12,71 @@
 </svelte:head>
 
 <div class="page">
-	<section class="hero-card">
-		<div class="cluster">
-			<Badge tone="accent">Desktop-first dashboard</Badge>
-			<Badge tone="sun">Store operations</Badge>
-		</div>
+	<PageIntro
+		compact={true}
+		kicker="Dashboard"
+		title="Track store performance and route into catalog, orders, or reports without mixing concerns."
+		description="The admin landing page now behaves like a real dashboard instead of a tab soup. Each operational area gets its own route from here."
+		badges={[
+			{ label: 'Desktop-first', tone: 'accent' },
+			{ label: 'Store operations', tone: 'sun' }
+		]}
+	/>
 
-		<div class="spotlight">
-			<p class="eyebrow">Admin workspace</p>
-			<h1 class="display-title">
-				Track store performance and keep the catalog in a healthy, sellable state.
-			</h1>
-			<p class="lead">
-				The admin surface prioritizes wide-screen density, faster comparative scanning, and
-				at-a-glance operational signals for a single store or location cluster.
-			</p>
-		</div>
-
-		<div class="metric-grid">
-			{#each adminMetrics as metric (metric.label)}
-				<MetricCard label={metric.label} value={metric.value} detail={metric.detail} />
-			{/each}
-		</div>
-	</section>
+	<div class="metric-grid">
+		{#each adminMetrics as metric (metric.label)}
+			<MetricCard label={metric.label} value={metric.value} detail={metric.detail} />
+		{/each}
+	</div>
 
 	<section class="dashboard-grid">
 		<Card>
 			<div class="section-header">
-				<p class="kicker">Operations board</p>
-				<h2 class="section-title">Role-based management tabs</h2>
+				<p class="kicker">Workspace routes</p>
+				<h2 class="section-title">Choose the management area you want next</h2>
 			</div>
-
-			<Tabs.Root bind:value={activeTab}>
-				<Tabs.List class="tabs-list">
-					<Tabs.Trigger class="tabs-trigger" value="catalog">
-						<Boxes size={16} />
-						Catalog
-					</Tabs.Trigger>
-					<Tabs.Trigger class="tabs-trigger" value="reports">
-						<ChartColumn size={16} />
-						Reports
-					</Tabs.Trigger>
-					<Tabs.Trigger class="tabs-trigger" value="ops">
-						<ClipboardList size={16} />
-						Ops
-					</Tabs.Trigger>
-				</Tabs.List>
-
-				<Tabs.Content class="tabs-panel" value="catalog">
-					<div class="table-card">
-						<div class="list-row">
-							<strong>Top moving products</strong>
-							<Badge>14 SKUs this week</Badge>
+			<div class="list">
+				<div class="product-card">
+					<div class="list-row">
+						<div>
+							<strong>Catalog</strong>
+							<div class="meta">Product readiness, categories, and merchandising hygiene.</div>
 						</div>
-						{#each adminProducts as product (product.id)}
-							<div class="table-row">
-								<div>
-									<strong>{product.name}</strong>
-									<div class="meta">{product.category} · {product.sku}</div>
-								</div>
-								<div>
-									<strong>${product.price.toFixed(2)}</strong>
-									<div class="meta">{product.stock} in stock</div>
-								</div>
-							</div>
-						{/each}
+						<a class="button secondary" href={resolve('/admin/catalog')}>
+							Open
+							<ArrowRight size={16} />
+						</a>
 					</div>
-				</Tabs.Content>
-
-				<Tabs.Content class="tabs-panel" value="reports">
-					<div class="table-card">
-						<div class="table-row">
-							<div>
-								<strong>Revenue pulse</strong>
-								<div class="meta">Gross sales rose after the weekend promo push.</div>
+				</div>
+				<div class="product-card">
+					<div class="list-row">
+						<div>
+							<strong>Orders</strong>
+							<div class="meta">
+								Track service progress, payment channel, and operational queue.
 							</div>
-							<Badge tone="success">+12.4%</Badge>
 						</div>
-						<div class="table-row">
-							<div>
-								<strong>Average basket</strong>
-								<div class="meta">Upsell bundle adoption is trending upward.</div>
-							</div>
-							<Badge tone="accent">$11.80</Badge>
-						</div>
-						<div class="table-row">
-							<div>
-								<strong>Inventory risk</strong>
-								<div class="meta">2 categories need replenishment before Friday noon rush.</div>
-							</div>
-							<Badge tone="sun">Watchlist</Badge>
-						</div>
+						<a class="button secondary" href={resolve('/admin/orders')}>
+							Open
+							<ArrowRight size={16} />
+						</a>
 					</div>
-				</Tabs.Content>
-
-				<Tabs.Content class="tabs-panel" value="ops">
-					<div class="list">
-						{#each adminAlerts as alert (alert.title)}
-							<div class="empty-state">
-								<strong>{alert.title}</strong>
-								<p class="muted">{alert.detail}</p>
+				</div>
+				<div class="product-card">
+					<div class="list-row">
+						<div>
+							<strong>Reports</strong>
+							<div class="meta">
+								Review sales pace, basket quality, and inventory watch signals.
 							</div>
-						{/each}
+						</div>
+						<a class="button secondary" href={resolve('/admin/reports')}>
+							Open
+							<ArrowRight size={16} />
+						</a>
 					</div>
-				</Tabs.Content>
-			</Tabs.Root>
+				</div>
+			</div>
 		</Card>
 
 		<Card>
@@ -128,24 +86,12 @@
 			</div>
 
 			<div class="list">
-				<div class="product-card">
-					<strong>Review stock thresholds</strong>
-					<p class="muted">
-						Automatic reorder suggestions should be rebalanced after the new drinks launch.
-					</p>
-				</div>
-				<div class="product-card">
-					<strong>Validate closing summary</strong>
-					<p class="muted">
-						Yesterday’s cash variance is under tolerance, but still needs manager acknowledgement.
-					</p>
-				</div>
-				<div class="product-card">
-					<strong>Refresh promo availability</strong>
-					<p class="muted">
-						Weekend promo SKUs should end automatically at midnight local store time.
-					</p>
-				</div>
+				{#each adminAlerts as alert (alert.title)}
+					<div class="product-card">
+						<strong>{alert.title}</strong>
+						<p class="muted">{alert.detail}</p>
+					</div>
+				{/each}
 			</div>
 		</Card>
 	</section>

@@ -12,6 +12,14 @@ export interface DemoSession {
 	loggedInAt: string;
 }
 
+export interface CartItem {
+	id: string;
+	name: string;
+	quantity: number;
+	unitPrice: number;
+	notes?: string;
+}
+
 export interface ProductCardItem {
 	id: number;
 	name: string;
