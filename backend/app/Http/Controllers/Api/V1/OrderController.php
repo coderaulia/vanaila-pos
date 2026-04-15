@@ -15,6 +15,8 @@ class OrderController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Order::class);
+
         $orders = Order::query()
             ->with(['store:id,name,code', 'cashier:id,name,email'])
             ->when($request->filled('store_id'), fn ($query) => $query->where('store_id', $request->integer('store_id')))
@@ -26,11 +28,15 @@ class OrderController extends Controller
 
     public function show(Order $order): JsonResponse
     {
+        $this->authorize('view', $order);
+
         return OrderResource::make($order->load(['store', 'cashier', 'items.product']))->response();
     }
 
     public function store(StoreOrderRequest $request): JsonResponse
     {
+        $this->authorize('create', Order::class);
+
         $validated = $request->validated();
 
         $order = DB::transaction(function () use ($request, $validated) {
