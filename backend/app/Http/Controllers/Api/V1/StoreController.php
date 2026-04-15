@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StoreResource;
 use App\Models\Store;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,16 +13,12 @@ class StoreController extends Controller
 {
     public function index(): JsonResponse
     {
-        return response()->json([
-            'data' => Store::query()->latest()->get(),
-        ]);
+        return StoreResource::collection(Store::query()->latest()->get())->response();
     }
 
     public function show(Store $store): JsonResponse
     {
-        return response()->json([
-            'data' => $store->loadCount(['products', 'orders']),
-        ]);
+        return StoreResource::make($store->loadCount(['products', 'orders']))->response();
     }
 
     public function store(Request $request): JsonResponse
@@ -38,7 +35,7 @@ class StoreController extends Controller
 
         $store = Store::query()->create($validated);
 
-        return response()->json(['data' => $store], 201);
+        return StoreResource::make($store)->response()->setStatusCode(201);
     }
 
     public function update(Request $request, Store $store): JsonResponse
@@ -55,6 +52,6 @@ class StoreController extends Controller
 
         $store->update($validated);
 
-        return response()->json(['data' => $store->fresh()]);
+        return StoreResource::make($store->fresh())->response();
     }
 }

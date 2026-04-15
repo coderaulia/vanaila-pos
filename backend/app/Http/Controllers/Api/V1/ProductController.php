@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,12 +26,12 @@ class ProductController extends Controller
             ->orderBy('name')
             ->paginate($request->integer('per_page', 12));
 
-        return response()->json($products);
+        return ProductResource::collection($products)->response();
     }
 
     public function show(Product $product): JsonResponse
     {
-        return response()->json(['data' => $product]);
+        return ProductResource::make($product)->response();
     }
 
     public function store(Request $request): JsonResponse
@@ -49,7 +50,7 @@ class ProductController extends Controller
 
         $product = Product::query()->create($validated);
 
-        return response()->json(['data' => $product], 201);
+        return ProductResource::make($product)->response()->setStatusCode(201);
     }
 
     public function update(Request $request, Product $product): JsonResponse
@@ -68,6 +69,6 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        return response()->json(['data' => $product->fresh()]);
+        return ProductResource::make($product->fresh())->response();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,13 +15,13 @@ class AdminUserController extends Controller
 {
     public function index(): JsonResponse
     {
-        return response()->json([
-            'data' => User::query()
+        return UserResource::collection(
+            User::query()
                 ->whereIn('role', [UserRole::Admin->value, UserRole::Cashier->value])
                 ->orderBy('role')
                 ->orderBy('name')
-                ->get(),
-        ]);
+                ->get()
+        )->response();
     }
 
     public function store(Request $request): JsonResponse
@@ -38,7 +39,7 @@ class AdminUserController extends Controller
 
         $user = User::query()->create($validated);
 
-        return response()->json(['data' => $user], 201);
+        return UserResource::make($user)->response()->setStatusCode(201);
     }
 
     public function update(Request $request, User $user): JsonResponse
@@ -58,6 +59,6 @@ class AdminUserController extends Controller
 
         $user->update($validated);
 
-        return response()->json(['data' => $user->fresh()]);
+        return UserResource::make($user->fresh())->response();
     }
 }

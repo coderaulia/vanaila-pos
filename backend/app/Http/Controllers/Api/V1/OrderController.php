@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
@@ -20,14 +21,12 @@ class OrderController extends Controller
             ->latest('placed_at')
             ->paginate($request->integer('per_page', 15));
 
-        return response()->json($orders);
+        return OrderResource::collection($orders)->response();
     }
 
     public function show(Order $order): JsonResponse
     {
-        return response()->json([
-            'data' => $order->load(['store', 'cashier', 'items.product']),
-        ]);
+        return OrderResource::make($order->load(['store', 'cashier', 'items.product']))->response();
     }
 
     public function store(StoreOrderRequest $request): JsonResponse
@@ -80,8 +79,8 @@ class OrderController extends Controller
             return $order;
         });
 
-        return response()->json([
-            'data' => $order->load(['store', 'cashier', 'items.product']),
-        ], 201);
+        return OrderResource::make($order->load(['store', 'cashier', 'items.product']))
+            ->response()
+            ->setStatusCode(201);
     }
 }
