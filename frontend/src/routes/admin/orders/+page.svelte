@@ -1,5 +1,4 @@
 <script lang="ts">
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Badge from '$components/ui/Badge.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { adminOrders } from '$mocks/pos';
@@ -10,17 +9,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Orders"
-		title="Operational monitoring gets its own board so managers can track flow without opening the cashier screen."
-		description="This route is shaped for service oversight across walk-ins, cashier-assisted orders, and guest self-checkout orders."
-		badges={[
-			{ label: 'Ops board', tone: 'accent' },
-			{ label: 'Cross-channel', tone: 'sun' }
-		]}
-	/>
-
 	<section class="dashboard-grid">
 		<Card>
 			<div class="section-header">

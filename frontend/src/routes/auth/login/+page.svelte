@@ -1,18 +1,21 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { Shield, ShieldCheck, Smartphone } from 'lucide-svelte';
+	import { Shield, ShieldCheck, Smartphone, KeyRound } from 'lucide-svelte';
 	import ShellFrame from '$components/layout/ShellFrame.svelte';
 	import Badge from '$components/ui/Badge.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { publicNavigationItems } from '$config/app';
 	import { demoUsers } from '$mocks/pos';
 	import { session } from '$stores/session.svelte';
-	import type { UserRole } from '$types/pos';
+	import { apiRequest } from '$lib/api/client';
+	import type { AppUser, UserRole } from '$types/pos';
 
 	let email = $state('cashier@vanaila.test');
 	let password = $state('password');
 	let deviceName = $state('cashier-tablet');
+	let isSubmitting = $state(false);
+	let errorMessage = $state('');
 
 	const roleTargets = {
 		cashier: '/cashier',
@@ -41,8 +44,34 @@
 		}
 	];
 
-	async function continueAs(role: UserRole) {
-		session.loginAs(role);
+	async function submitLogin() {
+		try {
+			isSubmitting = true;
+			errorMessage = '';
+
+			const payload = {
+				email,
+				password,
+				device_name: deviceName
+			};
+
+			const response = await apiRequest<{ token: string; user: AppUser }>('/auth/login', {
+				method: 'POST',
+				body: JSON.stringify(payload)
+			});
+
+			session.setSession(response.token, response.user);
+			await goto(resolve(roleTargets[response.user.role]));
+		} catch (e) {
+			const err = e as Error;
+			errorMessage = err.message || 'Login failed. Please check your credentials.';
+		} finally {
+			isSubmitting = false;
+		}
+	}
+
+	async function continueAsMock(role: UserRole) {
+		session.setSession(`demo-${role}-token`, demoUsers[role]);
 		await goto(resolve(roleTargets[role]));
 	}
 </script>
@@ -52,87 +81,80 @@
 </svelte:head>
 
 <ShellFrame
-	contextLabel="Role access"
-	contextTitle="Choose the workspace you want to simulate before the real API login lands."
-	contextDescription="This page stays aligned with the future Sanctum login contract, while the demo buttons keep frontend flows moving during the frontend-first build."
+	contextLabel="Login"
+	contextTitle="Welcome to Vanaila POS"
+	contextDescription="Please sign in to access your assigned workspace."
 	navItems={publicNavigationItems}
-	badges={[{ label: 'Sanctum-ready', tone: 'accent' }]}
-	showSessionBadge={true}
-	allowSignOut={true}
+	showSessionBadge={false}
+	allowSignOut={false}
 	variant="public"
 >
-	<div class="page">
-		<section class="hero-card">
-			<div class="spotlight">
-				<Badge tone="accent">Static frontend auth shell</Badge>
-				<p class="eyebrow">Prepared for `POST /api/v1/auth/login`</p>
-				<h1 class="display-title">
-					Choose a role, then swap the demo session for the real API call later.
-				</h1>
-				<p class="lead">
-					The structure is already set up for email, password, and device name, but role shortcuts
-					keep the cashier and backoffice areas testable while we build the frontend first.
-				</p>
+	<div class="page" style="margin: 0 auto; max-width: 480px; padding-top: 2rem;">
+		<Card>
+			<div class="section-header">
+				<p class="kicker">Secure Access</p>
+				<h2 class="section-title">Sign In</h2>
 			</div>
-		</section>
 
-		<section class="split-grid">
-			<Card>
-				<div class="section-header">
-					<p class="kicker">Login contract</p>
-					<h2 class="section-title">Prepared request payload</h2>
-				</div>
+			<form
+				class="field-grid"
+				onsubmit={(e) => {
+					e.preventDefault();
+					submitLogin();
+				}}
+			>
+				{#if errorMessage}
+					<div class="empty-state" style="border-color: var(--danger); color: var(--danger);">
+						<strong>Error</strong>
+						<p>{errorMessage}</p>
+					</div>
+				{/if}
 
-				<div class="field-grid">
-					<label class="field">
-						<span>Email</span>
-						<input bind:value={email} type="email" placeholder="cashier@vanaila.test" />
-					</label>
+				<label class="field">
+					<span>Email</span>
+					<input bind:value={email} type="email" placeholder="cashier@vanaila.test" required />
+				</label>
 
-					<label class="field">
-						<span>Password</span>
-						<input bind:value={password} type="password" placeholder="password" />
-					</label>
+				<label class="field">
+					<span>Password</span>
+					<input bind:value={password} type="password" placeholder="password" required />
+				</label>
 
-					<label class="field">
-						<span>Device name</span>
-						<input bind:value={deviceName} type="text" placeholder="cashier-tablet" />
-					</label>
-				</div>
+				<label class="field" style="display: none;">
+					<span>Device name</span>
+					<input bind:value={deviceName} type="text" placeholder="cashier-tablet" required />
+				</label>
 
-				<div class="empty-state">
-					<strong>Boilerplate note</strong>
-					<p class="muted">
-						The real submission step should call the API client in `src/lib/api/client.ts`, persist
-						the returned bearer token, and replace this local session shortcut.
-					</p>
-				</div>
-			</Card>
+				<button type="submit" class="button" disabled={isSubmitting}>
+					<KeyRound size={18} />
+					{isSubmitting ? 'Verifying credentials...' : 'Sign In'}
+				</button>
+			</form>
+		</Card>
 
-			<Card>
-				<div class="section-header">
-					<p class="kicker">Demo entry points</p>
-					<h2 class="section-title">Jump into each role shell</h2>
-				</div>
+		<Card>
+			<div class="section-header">
+				<p class="kicker">Demo entry points</p>
+				<h2 class="section-title">Jump into each role shell</h2>
+			</div>
 
-				<div class="list">
-					{#each roleMeta as entry (entry.role)}
-						<div class="product-card">
-							<div class="list-row">
-								<div class="cluster">
-									<entry.icon size={18} />
-									<strong>{entry.title}</strong>
-								</div>
-								<Badge>{demoUsers[entry.role].email}</Badge>
+			<div class="list">
+				{#each roleMeta as entry (entry.role)}
+					<div class="product-card">
+						<div class="list-row">
+							<div class="cluster">
+								<entry.icon size={18} />
+								<strong>{entry.title}</strong>
 							</div>
-							<p class="muted">{entry.description}</p>
-							<button class="button" onclick={() => continueAs(entry.role)}>
-								Continue as {entry.title}
-							</button>
+							<Badge>{demoUsers[entry.role].email}</Badge>
 						</div>
-					{/each}
-				</div>
-			</Card>
-		</section>
+						<p class="muted">{entry.description}</p>
+						<button class="button secondary" onclick={() => continueAsMock(entry.role)}>
+							Mock {entry.title} Token
+						</button>
+					</div>
+				{/each}
+			</div>
+		</Card>
 	</div>
 </ShellFrame>

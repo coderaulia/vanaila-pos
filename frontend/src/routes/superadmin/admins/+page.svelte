@@ -1,5 +1,4 @@
 <script lang="ts">
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Badge from '$components/ui/Badge.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { superadminAdminRoster } from '$mocks/pos';
@@ -10,17 +9,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Admins"
-		title="Admin management now has a dedicated surface for roster and access reviews."
-		description="This route prepares the frontend for invitations, role changes, and store assignments without crowding the overview page."
-		badges={[
-			{ label: 'Access control', tone: 'accent' },
-			{ label: 'Roster view', tone: 'sun' }
-		]}
-	/>
-
 	<section class="dashboard-grid">
 		<Card>
 			<div class="section-header">

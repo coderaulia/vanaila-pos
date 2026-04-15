@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { CreditCard, Sparkles } from 'lucide-svelte';
 	import { resolve } from '$app/paths';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import CartSummaryCard from '$components/commerce/CartSummaryCard.svelte';
 	import CatalogToolbar from '$components/commerce/CatalogToolbar.svelte';
 	import ProductGrid from '$components/commerce/ProductGrid.svelte';
@@ -55,17 +54,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="New order"
-		title="Fast tap targets, quick cart review, and clear next actions for a busy cashier."
-		description="This page now focuses on the active sale only. Held orders, transactions, and shift tools moved into their own routes so the main cashier screen stays lighter."
-		badges={[
-			{ label: 'Mobile-first', tone: 'accent' },
-			{ label: 'Live cart', tone: 'success' }
-		]}
-	/>
-
 	<div class="metric-grid">
 		<MetricCard
 			label="Current store"

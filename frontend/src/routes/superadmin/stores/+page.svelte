@@ -1,5 +1,4 @@
 <script lang="ts">
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Badge from '$components/ui/Badge.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { superadminStores } from '$mocks/pos';
@@ -10,17 +9,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Stores"
-		title="Store-level health gets its own network view for rollout and support decisions."
-		description="This is the foundation for provisioning, store status, and per-location configuration once the backend catches up."
-		badges={[
-			{ label: 'Multi-store', tone: 'accent' },
-			{ label: 'Rollout watch', tone: 'sun' }
-		]}
-	/>
-
 	<section class="dashboard-grid">
 		<Card>
 			<div class="section-header">

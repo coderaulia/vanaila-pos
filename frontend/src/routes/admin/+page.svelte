@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { ArrowRight } from 'lucide-svelte';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import MetricCard from '$components/ui/MetricCard.svelte';
 	import { adminAlerts, adminMetrics } from '$mocks/pos';
@@ -12,17 +11,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Dashboard"
-		title="Track store performance and route into catalog, orders, or reports without mixing concerns."
-		description="The admin landing page now behaves like a real dashboard instead of a tab soup. Each operational area gets its own route from here."
-		badges={[
-			{ label: 'Desktop-first', tone: 'accent' },
-			{ label: 'Store operations', tone: 'sun' }
-		]}
-	/>
-
 	<div class="metric-grid">
 		{#each adminMetrics as metric (metric.label)}
 			<MetricCard label={metric.label} value={metric.value} detail={metric.detail} />

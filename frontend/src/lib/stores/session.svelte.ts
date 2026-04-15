@@ -1,11 +1,10 @@
 import { browser } from '$app/environment';
-import { demoUsers } from '$mocks/pos';
-import type { DemoSession, UserRole } from '$types/pos';
+import type { AppSession, AppUser } from '$types/pos';
 
 const STORAGE_KEY = 'vanaila-pos-session';
 
 class SessionStore {
-	current = $state<DemoSession | null>(null);
+	current = $state<AppSession | null>(null);
 
 	constructor() {
 		if (!browser) {
@@ -19,16 +18,16 @@ class SessionStore {
 		}
 
 		try {
-			this.current = JSON.parse(stored) as DemoSession;
+			this.current = JSON.parse(stored) as AppSession;
 		} catch {
 			localStorage.removeItem(STORAGE_KEY);
 		}
 	}
 
-	loginAs(role: UserRole) {
+	setSession(token: string, user: AppUser) {
 		this.current = {
-			token: `demo-${role}-token`,
-			user: demoUsers[role],
+			token,
+			user,
 			loggedInAt: new Date().toISOString()
 		};
 		this.persist();

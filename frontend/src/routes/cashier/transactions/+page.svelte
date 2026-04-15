@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Download, RefreshCw } from 'lucide-svelte';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Badge from '$components/ui/Badge.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { cashierTransactions } from '$mocks/pos';
@@ -11,17 +10,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Transactions"
-		title="Recent payments and voids now live in their own audit-friendly route."
-		description="Keeping payment history outside the active cart helps the cashier stay focused during rush periods while still leaving room for review and reversal workflows."
-		badges={[
-			{ label: 'Payment log', tone: 'accent' },
-			{ label: 'Review-friendly', tone: 'sun' }
-		]}
-	/>
-
 	<section class="split-grid">
 		<Card>
 			<div class="section-header">

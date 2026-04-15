@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import CartSummaryCard from '$components/commerce/CartSummaryCard.svelte';
 	import CatalogToolbar from '$components/commerce/CatalogToolbar.svelte';
 	import ProductGrid from '$components/commerce/ProductGrid.svelte';
@@ -54,17 +53,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Menu"
-		title={`A calmer guest menu for table ${tableCode}, separate from staff-only selling tools.`}
-		description="The guest flow keeps product browsing, cart review, and payment focused on just a few clear choices."
-		badges={[
-			{ label: 'Guest-facing', tone: 'accent' },
-			{ label: 'Mobile-first', tone: 'sun' }
-		]}
-	/>
-
 	<section class="split-grid">
 		<div class="page">
 			<CatalogToolbar
@@ -114,7 +102,7 @@
 				<a
 					class="button"
 					href={resolve('/table/[tableCode]/checkout', {
-						tableCode: page.params.tableCode ?? tableDemoCode
+						tableCode
 					})}
 				>
 					Continue to checkout

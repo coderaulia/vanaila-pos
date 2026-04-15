@@ -1,14 +1,16 @@
 export type UserRole = 'cashier' | 'admin' | 'superadmin';
 
-export interface DemoUser {
+export interface AppUser {
+	id: number;
 	name: string;
 	email: string;
+	phone?: string;
 	role: UserRole;
 }
 
-export interface DemoSession {
+export interface AppSession {
 	token: string;
-	user: DemoUser;
+	user: AppUser;
 	loggedInAt: string;
 }
 

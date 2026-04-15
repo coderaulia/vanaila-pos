@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { CheckCircle2, Wallet } from 'lucide-svelte';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import MetricCard from '$components/ui/MetricCard.svelte';
 	import { cashierSummary } from '$mocks/pos';
@@ -11,17 +10,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Shift handoff"
-		title="A dedicated shift view keeps register checks separate from the live selling flow."
-		description="This page is meant for reconciliation, closeout, and handoff readiness, not order entry."
-		badges={[
-			{ label: 'Register control', tone: 'accent' },
-			{ label: 'Handoff ready', tone: 'sun' }
-		]}
-	/>
-
 	<div class="metric-grid">
 		<MetricCard
 			label="Store"

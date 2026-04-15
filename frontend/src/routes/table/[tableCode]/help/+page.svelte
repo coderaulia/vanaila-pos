@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { BellRing, HandPlatter, Receipt } from 'lucide-svelte';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Card from '$components/ui/Card.svelte';
 
 	const helpOptions = [
@@ -27,17 +26,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Help"
-		title="Guests should be able to ask for help without leaving the checkout flow."
-		description="This route gives the table journey a clear escape hatch for service and billing support."
-		badges={[
-			{ label: 'Service assist', tone: 'accent' },
-			{ label: 'Table-safe', tone: 'sun' }
-		]}
-	/>
-
 	<Card>
 		<div class="section-header">
 			<p class="kicker">Service actions</p>

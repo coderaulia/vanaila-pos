@@ -1,5 +1,4 @@
 <script lang="ts">
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import MetricCard from '$components/ui/MetricCard.svelte';
 	import { adminAlerts, adminMetrics } from '$mocks/pos';
@@ -10,17 +9,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Reports"
-		title="Performance review stays separate from operational screens so analysis gets room to breathe."
-		description="This view is tuned for desktop reading and will be the future home for trend charts, export actions, and store reporting filters."
-		badges={[
-			{ label: 'Analytics', tone: 'accent' },
-			{ label: 'Desktop-first', tone: 'sun' }
-		]}
-	/>
-
 	<div class="metric-grid">
 		{#each adminMetrics as metric (metric.label)}
 			<MetricCard label={metric.label} value={metric.value} detail={metric.detail} />

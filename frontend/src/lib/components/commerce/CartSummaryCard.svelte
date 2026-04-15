@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Card from '$components/ui/Card.svelte';
 	import Badge from '$components/ui/Badge.svelte';
+	import { slide, fade } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
 	import type { CartItem } from '$types/pos';
 
 	type Props = {
@@ -32,9 +34,14 @@
 	</div>
 
 	{#if items.length > 0}
-		<div class="cart-list">
+		<div class="cart-list" in:fade={{ duration: 200 }}>
 			{#each items as item (item.id)}
-				<div class="product-card">
+				<div
+					class="product-card"
+					animate:flip={{ duration: 300 }}
+					in:slide={{ duration: 300, axis: 'y' }}
+					out:slide={{ duration: 200, axis: 'y' }}
+				>
 					<div class="list-row">
 						<div>
 							<strong>{item.name}</strong>

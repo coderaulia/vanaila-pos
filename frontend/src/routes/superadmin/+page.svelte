@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { ArrowRight } from 'lucide-svelte';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import MetricCard from '$components/ui/MetricCard.svelte';
 	import { superadminMetrics, superadminStores } from '$mocks/pos';
@@ -12,17 +11,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Overview"
-		title="Manage the full POS network from one operational plane."
-		description="The control tower now routes into dedicated store, admin, and settings sections so platform work stops competing inside one crowded page."
-		badges={[
-			{ label: 'Global governance', tone: 'accent' },
-			{ label: 'Multi-store visibility', tone: 'sun' }
-		]}
-	/>
-
 	<div class="metric-grid">
 		{#each superadminMetrics as metric (metric.label)}
 			<MetricCard label={metric.label} value={metric.value} detail={metric.detail} />

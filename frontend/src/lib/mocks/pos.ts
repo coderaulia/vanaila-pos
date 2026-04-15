@@ -1,25 +1,28 @@
 import type {
 	AlertItem,
 	CartItem,
-	DemoUser,
+	AppUser,
 	MetricCardItem,
 	ProductCardItem,
 	StoreHealthCard,
 	UserRole
 } from '$types/pos';
 
-export const demoUsers: Record<UserRole, DemoUser> = {
+export const demoUsers: Record<UserRole, AppUser> = {
 	cashier: {
+		id: 1,
 		name: 'Maya Cashier',
 		email: 'cashier@vanaila.test',
 		role: 'cashier'
 	},
 	admin: {
+		id: 2,
 		name: 'Raka Admin',
 		email: 'admin@vanaila.test',
 		role: 'admin'
 	},
 	superadmin: {
+		id: 3,
 		name: 'Nadya Superadmin',
 		email: 'superadmin@vanaila.test',
 		role: 'superadmin'

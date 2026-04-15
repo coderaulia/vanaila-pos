@@ -1,5 +1,4 @@
 <script lang="ts">
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Badge from '$components/ui/Badge.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { superadminSettings } from '$mocks/pos';
@@ -10,17 +9,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Global settings"
-		title="Shared platform controls live on their own page instead of hiding inside overview cards."
-		description="That separation makes future forms for taxes, brand defaults, and access policy much easier to extend."
-		badges={[
-			{ label: 'Platform defaults', tone: 'accent' },
-			{ label: 'Restricted controls', tone: 'sun' }
-		]}
-	/>
-
 	<section class="dashboard-grid">
 		<Card>
 			<div class="section-header">

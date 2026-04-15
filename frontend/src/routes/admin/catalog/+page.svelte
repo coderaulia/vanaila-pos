@@ -1,5 +1,4 @@
 <script lang="ts">
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import CatalogToolbar from '$components/commerce/CatalogToolbar.svelte';
 	import ProductGrid from '$components/commerce/ProductGrid.svelte';
 	import Card from '$components/ui/Card.svelte';
@@ -28,17 +27,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Catalog"
-		title="Products and categories now have a cleaner workspace than the old all-in-one dashboard."
-		description="This route is the foundation for future product create, edit, publish, and stock actions, while keeping the current UI focused on discoverability."
-		badges={[
-			{ label: 'Merchandising', tone: 'accent' },
-			{ label: 'Search-ready', tone: 'sun' }
-		]}
-	/>
-
 	<section class="split-grid">
 		<div class="page">
 			<CatalogToolbar

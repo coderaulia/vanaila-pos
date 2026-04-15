@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Play, ReceiptText } from 'lucide-svelte';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Badge from '$components/ui/Badge.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { cashierHeldOrders } from '$mocks/pos';
@@ -11,17 +10,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Held orders"
-		title="Parked tickets are separated from the active register so the main sale flow stays clean."
-		description="Use this route for interrupted tables, preorder handoff, and anything the cashier needs to resume later without cluttering the new-order screen."
-		badges={[
-			{ label: `${cashierHeldOrders.length} parked tickets`, tone: 'accent' },
-			{ label: 'Resume-ready', tone: 'sun' }
-		]}
-	/>
-
 	<section class="dashboard-grid">
 		<Card>
 			<div class="section-header">

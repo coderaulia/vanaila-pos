@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { ShoppingCart } from 'lucide-svelte';
+	import { fade, fly } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
 	import Badge from '$components/ui/Badge.svelte';
 	import type { ProductCardItem } from '$types/pos';
 
@@ -23,9 +25,14 @@
 </script>
 
 {#if products.length > 0}
-	<div class="product-grid">
-		{#each products as product (product.id)}
-			<article class="product-card">
+	<div class="product-grid" in:fade={{ duration: 200 }}>
+		{#each products as product, i (product.id)}
+			<article
+				class="product-card"
+				animate:flip={{ duration: 300 }}
+				in:fly={{ y: 20, duration: 400, delay: Math.min(i * 50, 400) }}
+				out:fade={{ duration: 150 }}
+			>
 				<div class="list-row">
 					<div>
 						<strong>{product.name}</strong>

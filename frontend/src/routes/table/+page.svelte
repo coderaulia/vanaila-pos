@@ -2,7 +2,6 @@
 	import { QrCode, UtensilsCrossed } from 'lucide-svelte';
 	import { resolve } from '$app/paths';
 	import ShellFrame from '$components/layout/ShellFrame.svelte';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { publicNavigationItems, tableDemoCode, tableDemoPath } from '$config/app';
 	import { tableDemoProfile } from '$mocks/pos';
@@ -24,17 +23,6 @@
 	variant="public"
 >
 	<div class="page">
-		<PageIntro
-			compact={true}
-			kicker="Table routing"
-			title="Start from a scanned table code and land guests in their own session-aware menu flow."
-			description="For this phase we’re using a demo table route, but the structure is ready for real QR codes that resolve into `/table/[tableCode]`."
-			badges={[
-				{ label: `Demo table ${tableDemoProfile.code}`, tone: 'accent' },
-				{ label: tableDemoProfile.store, tone: 'sun' }
-			]}
-		/>
-
 		<section class="split-grid">
 			<Card>
 				<div class="section-header">

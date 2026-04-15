@@ -20,7 +20,9 @@
 	--accent-sun-soft: rgba(221, 107, 32, 0.14);
 	--success: #15803d;
 	--danger: #b91c1c;
+	--shadow-sm: 0 4px 12px rgba(18, 33, 34, 0.08);
 	--shadow: 0 20px 60px rgba(18, 33, 34, 0.14);
+	--shadow-hover: 0 30px 80px rgba(18, 33, 34, 0.22);
 	--radius-lg: 28px;
 	--radius-md: 20px;
 	--radius-sm: 14px;
@@ -50,7 +52,9 @@
 	--accent-sun-soft: rgba(255, 157, 82, 0.16);
 	--success: #3fbf72;
 	--danger: #ff7b7b;
+	--shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
 	--shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+	--shadow-hover: 0 34px 90px rgba(0, 0, 0, 0.5);
 }
 
 html {
@@ -111,9 +115,25 @@ img {
 	width: 18rem;
 	height: 18rem;
 	border-radius: 999px;
-	filter: blur(80px);
-	opacity: 0.26;
+	filter: blur(90px);
+	opacity: 0.35;
 	pointer-events: none;
+	animation: pulse-orb 12s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-orb {
+	0% {
+		transform: scale(1) translate(0, 0);
+		opacity: 0.35;
+	}
+	50% {
+		transform: scale(1.1) translate(2rem, -2rem);
+		opacity: 0.45;
+	}
+	100% {
+		transform: scale(1) translate(-2rem, 2rem);
+		opacity: 0.35;
+	}
 }
 
 .ambient-orb.a {
@@ -272,6 +292,15 @@ img {
 	font-size: 0.73rem;
 	font-weight: 700;
 	text-align: center;
+	transition:
+		color 0.2s ease,
+		background-color 0.2s ease,
+		transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shell-footer-link:hover {
+	color: var(--text);
+	transform: translateY(-2px);
 }
 
 .shell-footer-link.active {
@@ -305,7 +334,20 @@ img {
 	border: 1px solid var(--line);
 	border-radius: var(--radius-md);
 	box-shadow: var(--shadow);
-	backdrop-filter: blur(22px);
+	backdrop-filter: blur(24px);
+	-webkit-backdrop-filter: blur(24px);
+	transition:
+		transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+		box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+		border-color 0.3s ease;
+}
+
+.product-card:hover,
+.metric-card:hover,
+.route-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-hover);
+	border-color: var(--line-strong);
 }
 
 .surface,
@@ -317,9 +359,9 @@ img {
 }
 
 .hero-card {
-	padding: clamp(1.2rem, 2vw, 2rem);
+	padding: 1.1rem;
 	display: grid;
-	gap: 1.4rem;
+	gap: 1.2rem;
 }
 
 .section-intro {
@@ -333,15 +375,15 @@ img {
 }
 
 .display-title {
-	font-size: clamp(2rem, 5vw, 4rem);
+	font-size: clamp(1.4rem, 4vw, 2rem);
 	max-width: 14ch;
 }
 
 .lead {
 	max-width: 60ch;
 	color: var(--muted);
-	font-size: 1rem;
-	line-height: 1.7;
+	font-size: 0.95rem;
+	line-height: 1.5;
 }
 
 .text-gradient {
@@ -379,7 +421,7 @@ img {
 
 .section-title {
 	font-family: var(--font-display);
-	font-size: clamp(1.15rem, 2vw, 1.45rem);
+	font-size: clamp(1.1rem, 2vw, 1.25rem);
 }
 
 .muted,
@@ -450,20 +492,32 @@ img {
 	color: white;
 	font-weight: 800;
 	transition:
-		transform 0.2s ease,
-		box-shadow 0.2s ease,
-		background-color 0.2s ease;
+		transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+		box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+		background-color 0.2s ease,
+		border-color 0.2s ease;
 }
 
 .button:hover {
-	transform: translateY(-1px);
-	box-shadow: 0 16px 30px rgba(15, 118, 110, 0.2);
+	transform: translateY(-2px);
+	box-shadow: 0 16px 30px rgba(15, 118, 110, 0.3);
+}
+
+.button:active {
+	transform: translateY(1px) scale(0.98);
+	box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
 }
 
 .button.secondary {
 	background: var(--surface-strong);
 	border-color: var(--line);
 	color: var(--text);
+	box-shadow: var(--shadow-sm);
+}
+
+.button.secondary:hover {
+	border-color: var(--line-strong);
+	box-shadow: var(--shadow);
 }
 
 .button.ghost {
@@ -486,6 +540,14 @@ img {
 	background: transparent;
 	color: var(--muted);
 	font-weight: 700;
+	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	cursor: pointer;
+}
+
+.chip:hover {
+	background: var(--surface-muted);
+	color: var(--text);
+	transform: translateY(-1px);
 }
 
 .chip.active {
@@ -510,6 +572,14 @@ img {
 	border-radius: 16px;
 	border: 1px solid var(--line);
 	background: var(--surface-strong);
+	transition:
+		border-color 0.25s ease,
+		box-shadow 0.25s ease;
+}
+
+.toolbar-search:focus-within {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
 .toolbar-search input {
@@ -523,7 +593,7 @@ img {
 
 .price {
 	font-family: var(--font-display);
-	font-size: 1.4rem;
+	font-size: 1.2rem;
 	font-weight: 700;
 }
 
@@ -578,6 +648,17 @@ img {
 	border: 1px solid var(--line);
 	background: var(--surface-strong);
 	color: var(--text);
+	transition:
+		border-color 0.25s ease,
+		box-shadow 0.25s ease;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+	outline: none;
+	border-color: var(--accent);
+	box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
 .field textarea {

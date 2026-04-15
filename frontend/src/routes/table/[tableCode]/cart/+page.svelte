@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import CartSummaryCard from '$components/commerce/CartSummaryCard.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { tableCart } from '$mocks/pos';
@@ -13,17 +12,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Cart"
-		title="Review the table’s current order before paying."
-		description="The cart route is intentionally simple so guests can confirm quantities and notes with minimal friction."
-		badges={[
-			{ label: 'Guest review', tone: 'accent' },
-			{ label: `${tableCart.length} items`, tone: 'sun' }
-		]}
-	/>
-
 	<section class="split-grid">
 		<CartSummaryCard
 			items={tableCart}

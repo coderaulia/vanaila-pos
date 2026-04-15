@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { CreditCard, QrCode, Wallet } from 'lucide-svelte';
-	import PageIntro from '$components/layout/PageIntro.svelte';
 	import CartSummaryCard from '$components/commerce/CartSummaryCard.svelte';
 	import Card from '$components/ui/Card.svelte';
 	import { tableCart } from '$mocks/pos';
@@ -29,17 +28,6 @@
 </svelte:head>
 
 <div class="page">
-	<PageIntro
-		compact={true}
-		kicker="Checkout"
-		title="Keep payment choices clear and limited for a calmer guest checkout."
-		description="This route is where we’ll later connect guest payment methods without exposing staff-oriented controls."
-		badges={[
-			{ label: 'Payment-ready', tone: 'accent' },
-			{ label: 'Guest-safe', tone: 'sun' }
-		]}
-	/>
-
 	<section class="split-grid">
 		<Card>
 			<div class="section-header">
