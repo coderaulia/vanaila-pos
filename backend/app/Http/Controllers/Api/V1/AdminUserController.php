@@ -47,4 +47,16 @@ class AdminUserController extends Controller
 
         return UserResource::make($user->fresh())->response();
     }
+
+    public function destroy(User $user): JsonResponse
+    {
+        // Guard: cannot deactivate a superadmin
+        if ($user->role?->value === 'superadmin' || $user->role === 'superadmin') {
+            return response()->json(['message' => 'Superadmin accounts cannot be deactivated.'], 403);
+        }
+
+        $user->update(['is_active' => false]);
+
+        return response()->json(['message' => 'User deactivated.']);
+    }
 }

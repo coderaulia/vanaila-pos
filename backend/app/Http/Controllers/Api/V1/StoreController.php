@@ -46,4 +46,13 @@ class StoreController extends Controller
 
         return StoreResource::make($store->fresh())->response();
     }
+
+    public function destroy(Store $store): JsonResponse
+    {
+        $this->authorize('update', $store);
+
+        $store->update(['is_active' => false]);
+
+        return response()->json(['message' => 'Store deactivated.']);
+    }
 }

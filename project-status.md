@@ -4,18 +4,19 @@ Date: 2026-04-15
 
 ## Current State
 
-Frontend is production-shaped: boilerplate removed, mobile-first typography, real Sanctum login wired. Backend has working auth, CRUD controllers, seeds, and tests but needs hardening (API Resources, Policies, FormRequests, stock logic, reports).
+Frontend is production-shaped. Backend is now hardened through Phase 4: full Policies, API Resources, FormRequests, stock deduction, order status transitions, and soft-delete deactivation routes. 25 routes registered, 4 tests passing.
 
 ## Completed
 
-- Static SvelteKit frontend with role-scoped shells
-- Clean login portal with live API + mock fallback
-- Laravel 11 API with Sanctum auth, 6 controllers, 5 models
-- Seed data for 3 roles, 2 stores, 3 products, 1 order
+- Static SvelteKit frontend with role-scoped shells and real Sanctum login
+- Laravel 11 API: auth, 6 controllers, 5 models, API Resources, FormRequests
+- Policies on Order/Product/Store (Phase 3)
+- Stock deduction with race-condition guard (Phase 4)
+- Order status transitions: open → paid / cancelled (Phase 4)
+- Soft-delete deactivation for products, stores, admins (Phase 4)
 
 ## Next Up
 
-1. Add API Resources, FormRequests, and Policies
-2. Stock deduction on order placement
-3. Report endpoints with date filters
-4. Comprehensive feature tests
+1. Report endpoints with date filters (Phase 5)
+2. Expanded feature test coverage (Phase 6)
+3. Documentation update (Phase 7)

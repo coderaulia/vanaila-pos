@@ -60,4 +60,13 @@ class ProductController extends Controller
 
         return ProductResource::make($product->fresh())->response();
     }
+
+    public function destroy(Product $product): JsonResponse
+    {
+        $this->authorize('update', $product);
+
+        $product->update(['is_active' => false]);
+
+        return response()->json(['message' => 'Product deactivated.']);
+    }
 }

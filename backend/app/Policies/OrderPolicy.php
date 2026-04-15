@@ -23,6 +23,18 @@ class OrderPolicy
         return $this->viewAny($user);
     }
 
+    public function update(User $user, Order $order): bool
+    {
+        $role = $user->role?->value ?? $user->role;
+
+        if (in_array($role, ['admin', 'superadmin'], true)) {
+            return true;
+        }
+
+        // Cashier can only update their own orders
+        return $role === 'cashier' && $order->cashier_id === $user->id;
+    }
+
     /**
      * @param array<int, UserRole> $roles
      */
