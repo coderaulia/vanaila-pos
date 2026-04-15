@@ -307,6 +307,7 @@ Authenticated:
 - `GET /api/v1/orders`
 - `GET /api/v1/orders/{order}`
 - `POST /api/v1/orders`
+- `PUT /api/v1/orders/{order}`
 
 Role-scoped:
 
@@ -314,12 +315,16 @@ Role-scoped:
   - `GET /api/v1/cashier/overview`
 - Admin/Superadmin:
   - `GET /api/v1/admin/overview`
+  - `GET /api/v1/reports/sales`
+  - `GET /api/v1/reports/products`
   - `POST /api/v1/admin/products`
   - `PUT /api/v1/admin/products/{product}`
+  - `DELETE /api/v1/admin/products/{product}` (soft-delete)
 - Superadmin:
   - `GET /api/v1/superadmin/overview`
-  - `GET|POST|PUT /api/v1/superadmin/stores...`
-  - `GET|POST|PUT /api/v1/superadmin/admins...`
+  - `GET /api/v1/reports/stores`
+  - `GET|POST|PUT|DELETE /api/v1/superadmin/stores...`
+  - `GET|POST|PUT|DELETE /api/v1/superadmin/admins...`
 
 ## 7. Local Development
 

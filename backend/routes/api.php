@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\StoreController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,9 @@ Route::prefix('v1')->group(function () {
             ->group(function () {
                 Route::get('/overview', [DashboardController::class, 'admin']);
 
+                Route::get('/reports/sales', [ReportController::class, 'sales']);
+                Route::get('/reports/products', [ReportController::class, 'products']);
+
                 Route::post('/products', [ProductController::class, 'store']);
                 Route::put('/products/{product}', [ProductController::class, 'update']);
                 Route::delete('/products/{product}', [ProductController::class, 'destroy']);
@@ -51,6 +55,8 @@ Route::prefix('v1')->group(function () {
             ->middleware('role:superadmin')
             ->group(function () {
                 Route::get('/overview', [DashboardController::class, 'superadmin']);
+
+                Route::get('/reports/stores', [ReportController::class, 'stores']);
 
                 Route::get('/stores', [StoreController::class, 'index']);
                 Route::post('/stores', [StoreController::class, 'store']);
