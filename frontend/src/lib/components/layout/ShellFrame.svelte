@@ -108,7 +108,7 @@
 	});
 
 	async function signOut() {
-		session.logout();
+		await session.logout();
 		await goto(resolve('/auth/login'));
 	}
 </script>

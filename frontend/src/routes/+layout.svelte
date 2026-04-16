@@ -1,8 +1,14 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import { session } from '$stores/session.svelte';
 
 	let { children } = $props();
+
+	onMount(() => {
+		void session.validate();
+	});
 </script>
 
 <svelte:head>

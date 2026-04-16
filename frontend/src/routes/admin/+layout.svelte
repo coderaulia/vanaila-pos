@@ -1,13 +1,20 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import ShellFrame from '$components/layout/ShellFrame.svelte';
 	import { adminNavigationItems } from '$config/app';
+	import { requireAuth } from '$lib/guards/auth';
+	import { session } from '$stores/session.svelte';
 
 	type Props = {
 		children: Snippet;
 	};
 
 	let { children }: Props = $props();
+
+	onMount(() => {
+		requireAuth(session, 'admin');
+	});
 </script>
 
 <ShellFrame
