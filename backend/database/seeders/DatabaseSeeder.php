@@ -8,7 +8,7 @@ use App\Models\Product;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Collection;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,124 +17,103 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $tebet = Store::query()->updateOrCreate(
-            ['code' => 'VNT-TBT'],
-            [
-                'name' => 'Vanaila Tebet',
-                'timezone' => 'Asia/Jakarta',
-                'currency' => 'IDR',
-                'phone' => '+62 812 0000 0001',
-                'address' => 'Jl. Tebet Barat Dalam No. 8, Jakarta Selatan',
-                'is_active' => true,
-            ],
-        );
+        $tebet = Store::factory()->create([
+            'name' => 'Vanaila Tebet',
+            'code' => 'VNT-TBT',
+            'timezone' => 'Asia/Jakarta',
+            'currency' => 'IDR',
+            'phone' => '+62 812 0000 0001',
+            'address' => 'Jl. Tebet Barat Dalam No. 8, Jakarta Selatan',
+            'is_active' => true,
+        ]);
 
-        $bsd = Store::query()->updateOrCreate(
-            ['code' => 'VNT-BSD'],
-            [
-                'name' => 'Vanaila BSD',
-                'timezone' => 'Asia/Jakarta',
-                'currency' => 'IDR',
-                'phone' => '+62 812 0000 0002',
-                'address' => 'Jl. BSD Raya Utama, Tangerang Selatan',
-                'is_active' => true,
-            ],
-        );
+        $bsd = Store::factory()->create([
+            'name' => 'Vanaila BSD',
+            'code' => 'VNT-BSD',
+            'timezone' => 'Asia/Jakarta',
+            'currency' => 'IDR',
+            'phone' => '+62 812 0000 0002',
+            'address' => 'Jl. BSD Raya Utama, Tangerang Selatan',
+            'is_active' => true,
+        ]);
 
-        $superadmin = User::query()->updateOrCreate(
-            ['email' => 'superadmin@vanaila.test'],
-            [
-                'name' => 'Nadya Superadmin',
-                'phone' => '+62 812 1111 1000',
-                'role' => UserRole::Superadmin,
-                'is_active' => true,
-                'password' => Hash::make('password'),
-            ],
-        );
+        $extraStores = Store::factory()
+            ->count(2)
+            ->create();
 
-        $admin = User::query()->updateOrCreate(
-            ['email' => 'admin@vanaila.test'],
-            [
-                'name' => 'Raka Admin',
-                'phone' => '+62 812 1111 2000',
-                'role' => UserRole::Admin,
-                'is_active' => true,
-                'password' => Hash::make('password'),
-            ],
-        );
+        User::factory()->superadmin()->create([
+            'name' => 'Nadya Superadmin',
+            'email' => 'superadmin@vanaila.test',
+            'phone' => '+62 812 1111 1000',
+            'is_active' => true,
+        ]);
 
-        $cashier = User::query()->updateOrCreate(
-            ['email' => 'cashier@vanaila.test'],
-            [
-                'name' => 'Maya Cashier',
-                'phone' => '+62 812 1111 3000',
-                'role' => UserRole::Cashier,
-                'is_active' => true,
-                'password' => Hash::make('password'),
-            ],
-        );
+        User::factory()->admin()->create([
+            'name' => 'Raka Admin',
+            'email' => 'admin@vanaila.test',
+            'phone' => '+62 812 1111 2000',
+            'is_active' => true,
+        ]);
 
-        $products = [
-            [
-                'store_id' => $tebet->id,
-                'sku' => 'LATTE-12',
-                'name' => 'Vanilla Cloud Latte',
-                'slug' => 'vanilla-cloud-latte',
-                'category' => 'Coffee',
-                'description' => 'Signature espresso with vanilla cream cap.',
-                'price_cents' => 55000,
-                'stock_quantity' => 72,
-                'is_active' => true,
-            ],
-            [
-                'store_id' => $tebet->id,
-                'sku' => 'FRAP-09',
-                'name' => 'Caramel Bean Frappe',
-                'slug' => 'caramel-bean-frappe',
-                'category' => 'Blended',
-                'description' => 'Cold caramel blend for afternoon service.',
-                'price_cents' => 62500,
-                'stock_quantity' => 31,
-                'is_active' => true,
-            ],
-            [
-                'store_id' => $bsd->id,
-                'sku' => 'MATCH-08',
-                'name' => 'Matcha Oat Shake',
-                'slug' => 'matcha-oat-shake',
-                'category' => 'Signature',
-                'description' => 'Oat milk shake with ceremonial matcha.',
-                'price_cents' => 59500,
-                'stock_quantity' => 18,
-                'is_active' => true,
-            ],
-        ];
+        $cashier = User::factory()->cashier()->create([
+            'name' => 'Maya Cashier',
+            'email' => 'cashier@vanaila.test',
+            'phone' => '+62 812 1111 3000',
+            'is_active' => true,
+        ]);
 
-        foreach ($products as $attributes) {
-            Product::query()->updateOrCreate(['sku' => $attributes['sku']], $attributes);
-        }
+        User::factory()->admin()->count(2)->create();
+        User::factory()->cashier()->count(6)->create();
 
-        $latte = Product::query()->where('sku', 'LATTE-12')->firstOrFail();
-        $frappe = Product::query()->where('sku', 'FRAP-09')->firstOrFail();
+        $latte = Product::factory()->for($tebet)->create([
+            'sku' => 'LATTE-12',
+            'name' => 'Vanilla Cloud Latte',
+            'slug' => 'vanilla-cloud-latte',
+            'category' => 'Coffee',
+            'description' => 'Signature espresso with vanilla cream cap.',
+            'price_cents' => 55000,
+            'stock_quantity' => 72,
+            'is_active' => true,
+        ]);
 
-        $order = Order::query()->updateOrCreate(
-            ['order_number' => 'ORD-20260413-0001'],
-            [
-                'store_id' => $tebet->id,
-                'cashier_id' => $cashier->id,
-                'status' => 'paid',
+        $frappe = Product::factory()->for($tebet)->create([
+            'sku' => 'FRAP-09',
+            'name' => 'Caramel Bean Frappe',
+            'slug' => 'caramel-bean-frappe',
+            'category' => 'Blended',
+            'description' => 'Cold caramel blend for afternoon service.',
+            'price_cents' => 62500,
+            'stock_quantity' => 31,
+            'is_active' => true,
+        ]);
+
+        Product::factory()->for($bsd)->create([
+            'sku' => 'MATCH-08',
+            'name' => 'Matcha Oat Shake',
+            'slug' => 'matcha-oat-shake',
+            'category' => 'Signature',
+            'description' => 'Oat milk shake with ceremonial matcha.',
+            'price_cents' => 59500,
+            'stock_quantity' => 18,
+            'is_active' => true,
+        ]);
+
+        Product::factory()->count(6)->for($tebet)->create();
+        Product::factory()->count(6)->for($bsd)->create();
+        $extraStores->each(fn (Store $store) => Product::factory()->count(5)->for($store)->create());
+
+        $order = Order::factory()
+            ->paid()
+            ->for($tebet, 'store')
+            ->for($cashier, 'cashier')
+            ->create([
+                'order_number' => 'ORD-20260413-0001',
                 'payment_method' => 'cash',
-                'subtotal_cents' => 172500,
-                'tax_cents' => 17250,
-                'discount_cents' => 0,
-                'total_cents' => 189750,
                 'notes' => 'Seeded example order.',
                 'placed_at' => now()->subHours(2),
                 'paid_at' => now()->subHours(2),
-            ],
-        );
+            ]);
 
-        $order->items()->delete();
         $order->items()->createMany([
             [
                 'product_id' => $latte->id,
@@ -153,5 +132,78 @@ class DatabaseSeeder extends Seeder
                 'line_total_cents' => 62500,
             ],
         ]);
+
+        $order->update([
+            'subtotal_cents' => 172500,
+            'tax_cents' => 17250,
+            'discount_cents' => 0,
+            'total_cents' => 189750,
+        ]);
+
+        $allStores = Store::query()->get();
+        $cashiers = User::query()->where('role', UserRole::Cashier->value)->get();
+
+        $allStores->each(function (Store $store) use ($cashiers) {
+            $products = Product::query()
+                ->where('store_id', $store->id)
+                ->where('is_active', true)
+                ->get();
+
+            $this->seedOrdersForStore($store, $cashiers, $products, 8);
+        });
+
+    }
+
+    private function seedOrdersForStore(
+        Store $store,
+        Collection $cashiers,
+        Collection $products,
+        int $count
+    ): void {
+        if ($products->isEmpty() || $cashiers->isEmpty()) {
+            return;
+        }
+
+        Order::factory()
+            ->count($count)
+            ->for($store, 'store')
+            ->state(fn (array $attributes) => [
+                'cashier_id' => $cashiers->random()->id,
+            ])
+            ->create()
+            ->each(function (Order $order) use ($products) {
+                $itemCount = min($products->count(), fake()->numberBetween(1, 3));
+                $selectedProducts = $products->shuffle()->take($itemCount);
+
+                $subtotal = 0;
+
+                foreach ($selectedProducts as $product) {
+                    $quantity = fake()->numberBetween(1, 3);
+                    $lineTotal = $product->price_cents * $quantity;
+                    $subtotal += $lineTotal;
+
+                    $order->items()->create([
+                        'product_id' => $product->id,
+                        'name_snapshot' => $product->name,
+                        'sku_snapshot' => $product->sku,
+                        'quantity' => $quantity,
+                        'unit_price_cents' => $product->price_cents,
+                        'line_total_cents' => $lineTotal,
+                    ]);
+                }
+
+                $tax = (int) round($subtotal * 0.1);
+                $discount = $order->status === 'paid'
+                    ? fake()->numberBetween(0, (int) round($subtotal * 0.1))
+                    : 0;
+
+                $order->update([
+                    'subtotal_cents' => $subtotal,
+                    'tax_cents' => $tax,
+                    'discount_cents' => $discount,
+                    'total_cents' => max($subtotal + $tax - $discount, 0),
+                    'paid_at' => $order->status === 'paid' ? ($order->paid_at ?? now()) : null,
+                ]);
+            });
     }
 }

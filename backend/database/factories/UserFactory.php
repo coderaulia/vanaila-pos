@@ -46,4 +46,32 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function cashier(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRole::Cashier->value,
+        ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRole::Admin->value,
+        ]);
+    }
+
+    public function superadmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRole::Superadmin->value,
+        ]);
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => false,
+        ]);
+    }
 }
